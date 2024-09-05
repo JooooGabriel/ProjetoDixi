@@ -1,0 +1,126 @@
+* {
+  padding: 10px;
+  margin: auto;
+}
+
+body {
+  font-family: 'Poppins';
+  font-size: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 3em;
+  color: #33e0ff;
+}
+
+.projet {
+  text-align: center;
+  font-size: 2em;
+  color: #000000;
+}
+
+
+input[type=text] {
+  border-radius: 8px;
+  /* Aumenta a curvatura dos cantos */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  /* Sombra mais suave e sutil */
+  background: #f9f9f9;
+  /* Fundo mais suave */
+  border: 1px solid #ccc;
+  /* Borda cinza claro */
+  width: 100px;
+  /* Aumenta a largura */
+  padding: 10px;
+  /* Espaçamento interno para texto */
+  font-size: 16px;
+  /* Aumenta o tamanho da fonte */
+  transition: all 0.3s ease;
+  /* Transição suave para interações */
+}
+
+/* Estilo ao focar na caixa de texto */
+input[type=text]:focus {
+  background: #ffffff;
+  /* Fundo branco ao focar */
+  border-color: #33e0ff;
+  /* Borda azul ao focar */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+  /* Sombra azul ao focar */
+  outline: none;
+  /* Remove o contorno padrão */
+}
+
+
+.botao {
+  outline: none;
+  height: 40px;
+  text-align: center;
+  width: 130px;
+  border-radius: 40px;
+  background: #e4eaeb;
+  border: 2px solid;
+  letter-spacing: 1px;
+  text-shadow: 0;
+  weight: bold;
+}
+
+.resultado {
+  color: #33e0ff;
+}
+
+.resultado-box {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.info {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.info span {
+  font-weight: bold;
+  font-size: 22px;
+  color: #000;
+}
+
+.marcacoes-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Garante que as marcações fiquem à esquerda e o ícone à direita */
+  width: 60%;
+  /* Define a largura máxima do container (ajuste conforme necessário) */
+  max-width: 600px;
+  /* Limite a largura máxima, opcional */
+  width: 100%;
+  /* A largura agora ocupa o espaço necessário, mas os itens ficam distribuídos */
+  margin-left: 0;
+  /* Remove qualquer centralização */
+}
+
+.marcacoes {
+  display: flex;
+  gap: 10px;
+  /* Espaçamento entre as marcações */
+  flex-wrap: nowrap;
+  /* Impede que as marcações quebrem linha */
+}
+
+.add-icon {
+  margin-left: 5px;
+  /* Diminui a distância entre o ícone e a quarta marcação */
+  width: 44px;
+  height: 44px;
+  cursor: pointer
+}
+
+.marcacoes input {
+  margin-right: 10px; /* Espaçamento entre os campos de marcação */
+}
+
