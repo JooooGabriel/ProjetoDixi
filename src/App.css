@@ -8,14 +8,9 @@ body {
   font-size: 20px;
 }
 
-h1 {
-  text-align: center;
-  font-size: 3em;
-  color: #33e0ff;
-}
 
 .projet {
-  text-align: center;
+  text-align: left;
   font-size: 2em;
   color: #000000;
 }
@@ -54,13 +49,14 @@ input[type=text]:focus {
 
 
 .botao {
+  color: white;
   outline: none;
   height: 40px;
   text-align: center;
   width: 130px;
   border-radius: 40px;
-  background: #e4eaeb;
-  border: 2px solid;
+  background: #33e0ff;
+  border: 2px solid rgb(90, 138, 141);
   letter-spacing: 1px;
   text-shadow: 0;
   }
@@ -121,4 +117,5 @@ input[type=text]:focus {
 .marcacoes input {
   margin-right: 10px; /* Espaçamento entre os campos de marcação */
 }
+
 
