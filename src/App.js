@@ -49,47 +49,60 @@ function App() {
   const calcularAdicionalNoturno = (inicio, fim) => {
     const horaInicioNoturno = converterParaData('22:00');
     const horaFimNoturno = addHours(converterParaData('05:00'), 24);
-
+  
     let minutosAdicional = 0;
-
+  
     if (isBefore(fim, inicio)) {
       fim = addHours(fim, 24); // Corrige para a virada do dia
     }
-
+  
+    // Ajustar início para 22:00 se começar antes
     if (isBefore(inicio, horaInicioNoturno) && isAfter(fim, horaInicioNoturno)) {
-      inicio = horaInicioNoturno; // Ajusta início para 22:00
+      inicio = horaInicioNoturno;
     }
+  
+    // Ajustar fim para 05:00 se terminar depois
     if (isAfter(fim, horaFimNoturno) || isEqual(fim, horaFimNoturno)) {
-      fim = horaFimNoturno; // Ajusta fim para 05:00
+      fim = horaFimNoturno;
     }
-
+  
+    // Verifica se o período está dentro da janela noturna
     if ((isAfter(inicio, horaInicioNoturno) || isEqual(inicio, horaInicioNoturno)) &&
         (isBefore(fim, horaFimNoturno) || isEqual(fim, horaFimNoturno))) {
+      
+      // Calcula a quantidade de minutos reais trabalhados no período noturno
       minutosAdicional = differenceInMinutes(fim, inicio);
+  
+      // Multiplica por 8/7 para ajustar o tempo, conforme a regra do adicional noturno
+      const fatorAdicional = 8 / 7;
+      const minutosAdicionalAjustado = Math.round(minutosAdicional * fatorAdicional);
+  
+      return minutosAdicionalAjustado;
     }
-
-    return Math.round(minutosAdicional);
+  
+    return 0; // Se não estiver dentro do período noturno, retorna 0
   };
+  
 
   const calcular = () => {
     const cargaHorariaMin = differenceInMinutes(converterParaData(cargaHoraria), converterParaData('00:00'));
-
+  
     let horasTrabalhadasMin = 0;
     let intervaloMin = 0;
     let adicionalNoturnoMin = 0;
-
+  
     for (let i = 0; i < marcacoes.length; i += 2) {
       let inicio = marcacoes[i] ? converterParaData(marcacoes[i]) : null;
       let fim = marcacoes[i + 1] ? converterParaData(marcacoes[i + 1]) : null;
-
+  
       if (inicio && fim) {
         if (isBefore(fim, inicio)) {
           fim = addMinutes(fim, 24 * 60); // Corrige para a virada do dia
         }
         horasTrabalhadasMin += differenceInMinutes(fim, inicio);
-        adicionalNoturnoMin += calcularAdicionalNoturno(inicio, fim);
+        adicionalNoturnoMin += calcularAdicionalNoturno(inicio, fim); // Calcula adicional noturno para cada par
       }
-
+  
       if (i + 2 < marcacoes.length) {
         let proximoInicio = marcacoes[i + 2] ? converterParaData(marcacoes[i + 2]) : null;
         if (fim && proximoInicio) {
@@ -100,21 +113,19 @@ function App() {
         }
       }
     }
-
+  
     let trabalhadaNormalMin = Math.min(horasTrabalhadasMin, cargaHorariaMin);
     const diferencaMinutos = horasTrabalhadasMin - cargaHorariaMin;
-
+  
     let debitoMin = 0;
     let creditoMin = 0;
-
+  
     if (diferencaMinutos > TOLERANCIA_MINUTOS) {
-      if (horasTrabalhadasMin < cargaHorariaMin) {
-        debitoMin = diferencaMinutos;
-      } else if (horasTrabalhadasMin > cargaHorariaMin) {
-        creditoMin = diferencaMinutos;
-      }
+      creditoMin = diferencaMinutos;
+    } else if (diferencaMinutos < -TOLERANCIA_MINUTOS) {
+      debitoMin = Math.abs(diferencaMinutos);
     }
-
+  
     setResultados({
       horasTrabalhadas: formatarResultado(horasTrabalhadasMin),
       debito: formatarResultado(debitoMin),
@@ -124,6 +135,8 @@ function App() {
       intervalo: formatarResultado(intervaloMin)
     });
   };
+  
+  
 
   const formatarResultado = (minutos) => {
     const horas = Math.floor(minutos / 60).toString().padStart(2, '0');
