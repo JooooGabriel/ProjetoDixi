@@ -63,8 +63,7 @@ input[type=text]:focus {
   border: 2px solid;
   letter-spacing: 1px;
   text-shadow: 0;
-  weight: bold;
-}
+  }
 
 .resultado {
   color: #33e0ff;
@@ -112,13 +111,12 @@ input[type=text]:focus {
   /* Impede que as marcações quebrem linha */
 }
 
-.add-icon {
-  margin-left: 5px;
-  /* Diminui a distância entre o ícone e a quarta marcação */
-  width: 44px;
-  height: 44px;
-  cursor: pointer
+.add-icon, .subtracao-icon {
+  width: 40px; /* Defina o tamanho apropriado */
+  height: 40px;
+  cursor: pointer;
 }
+
 
 .marcacoes input {
   margin-right: 10px; /* Espaçamento entre os campos de marcação */

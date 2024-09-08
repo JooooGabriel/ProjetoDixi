@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { format, parse, differenceInMinutes, addMinutes, isBefore, isAfter, addHours, isEqual } from 'date-fns';
 import './App.css';
-import addIcon from './add_icon.png'; // Import the image
+import addIcon from './add_icon.png';
+import subtracaoIcon from './subtracao.png';
 
 function App() {
   const [cargaHoraria, setCargaHoraria] = useState('');
@@ -15,14 +16,26 @@ function App() {
     intervalo: ''
   });
 
+  const TOLERANCIA_MINUTOS = 10;
+
   const handleInputChange = (index, value) => {
     const newMarcacoes = [...marcacoes];
     newMarcacoes[index] = formatarHora(value);
     setMarcacoes(newMarcacoes);
   };
 
+  const adicionarMarcacao = () => {
+    setMarcacoes([...marcacoes, '', '']);
+  };
+
+  const removerUltimaMarcacao = () => {
+    if (marcacoes.length > 4) {
+      setMarcacoes(marcacoes.slice(0, -2));
+    }
+  };
+
   const formatarHora = (value) => {
-    value = value.replace(/\D/g, ''); 
+    value = value.replace(/\D/g, '');
     if (value.length > 4) value = value.slice(0, 4);
     if (value.length > 2) value = value.slice(0, 2) + ':' + value.slice(2);
     return value;
@@ -35,52 +48,72 @@ function App() {
 
   const calcularAdicionalNoturno = (inicio, fim) => {
     const horaInicioNoturno = converterParaData('22:00');
-    const horaFimNoturno = addHours(converterParaData('05:00'), 24); // Ajuste para considerar 05:00 do próximo dia
-  
+    const horaFimNoturno = addHours(converterParaData('05:00'), 24);
+
     let minutosAdicional = 0;
-  
+
     if (isBefore(fim, inicio)) {
-      fim = addHours(fim, 24); // Ajuste para lidar com virada de dia
+      fim = addHours(fim, 24); // Corrige para a virada do dia
     }
-  
+
     if (isBefore(inicio, horaInicioNoturno) && isAfter(fim, horaInicioNoturno)) {
-      inicio = horaInicioNoturno; // Ajuste início para 22:00 se começar antes
+      inicio = horaInicioNoturno; // Ajusta início para 22:00
     }
     if (isAfter(fim, horaFimNoturno) || isEqual(fim, horaFimNoturno)) {
-      fim = horaFimNoturno; // Ajuste fim para 05:00 se terminar depois ou exatamente às 05:00
+      fim = horaFimNoturno; // Ajusta fim para 05:00
     }
-  
+
     if ((isAfter(inicio, horaInicioNoturno) || isEqual(inicio, horaInicioNoturno)) &&
         (isBefore(fim, horaFimNoturno) || isEqual(fim, horaFimNoturno))) {
       minutosAdicional = differenceInMinutes(fim, inicio);
-      minutosAdicional = (minutosAdicional * 60) / 52.5; // Ajuste para 52:30 minutos por hora
     }
-  
+
     return Math.round(minutosAdicional);
   };
 
   const calcular = () => {
     const cargaHorariaMin = differenceInMinutes(converterParaData(cargaHoraria), converterParaData('00:00'));
 
-    let [m1, m2, m3, m4] = marcacoes.map(hora => hora ? converterParaData(hora) : null);
+    let horasTrabalhadasMin = 0;
+    let intervaloMin = 0;
+    let adicionalNoturnoMin = 0;
 
-    const ajustarHorario = (inicio, fim) => isBefore(fim, inicio) ? addMinutes(fim, 24 * 60) : fim;
+    for (let i = 0; i < marcacoes.length; i += 2) {
+      let inicio = marcacoes[i] ? converterParaData(marcacoes[i]) : null;
+      let fim = marcacoes[i + 1] ? converterParaData(marcacoes[i + 1]) : null;
 
-    if (m2) m2 = ajustarHorario(m1, m2);
-    if (m4) m4 = ajustarHorario(m3, m4);
+      if (inicio && fim) {
+        if (isBefore(fim, inicio)) {
+          fim = addMinutes(fim, 24 * 60); // Corrige para a virada do dia
+        }
+        horasTrabalhadasMin += differenceInMinutes(fim, inicio);
+        adicionalNoturnoMin += calcularAdicionalNoturno(inicio, fim);
+      }
 
-    const horasTrabalhadasMin = (m2 && m1 ? differenceInMinutes(m2, m1) : 0) +
-                               (m4 && m3 ? differenceInMinutes(m4, m3) : 0);
+      if (i + 2 < marcacoes.length) {
+        let proximoInicio = marcacoes[i + 2] ? converterParaData(marcacoes[i + 2]) : null;
+        if (fim && proximoInicio) {
+          if (isBefore(proximoInicio, fim)) {
+            proximoInicio = addMinutes(proximoInicio, 24 * 60); // Ajuste para a virada do dia no intervalo
+          }
+          intervaloMin += differenceInMinutes(proximoInicio, fim);
+        }
+      }
+    }
 
-    const intervaloMin = m3 && m2 ? differenceInMinutes(m3, m2) : 0;
+    let trabalhadaNormalMin = Math.min(horasTrabalhadasMin, cargaHorariaMin);
+    const diferencaMinutos = horasTrabalhadasMin - cargaHorariaMin;
 
-    const trabalhadaNormalMin = Math.min(horasTrabalhadasMin, cargaHorariaMin);
+    let debitoMin = 0;
+    let creditoMin = 0;
 
-    const adicionalNoturnoMin = (m1 && m2 ? calcularAdicionalNoturno(m1, m2) : 0) +
-                               (m3 && m4 ? calcularAdicionalNoturno(m3, m4) : 0);
-
-    const debitoMin = cargaHorariaMin > horasTrabalhadasMin ? cargaHorariaMin - horasTrabalhadasMin : 0;
-    const creditoMin = horasTrabalhadasMin > cargaHorariaMin ? horasTrabalhadasMin - cargaHorariaMin : 0;
+    if (diferencaMinutos > TOLERANCIA_MINUTOS) {
+      if (horasTrabalhadasMin < cargaHorariaMin) {
+        debitoMin = diferencaMinutos;
+      } else if (horasTrabalhadasMin > cargaHorariaMin) {
+        creditoMin = diferencaMinutos;
+      }
+    }
 
     setResultados({
       horasTrabalhadas: formatarResultado(horasTrabalhadasMin),
@@ -116,19 +149,29 @@ function App() {
       </div>
       <h2>Marcações</h2>
       <div className="marcacoes-container">
-  <div className="marcacoes">
-    {marcacoes.map((marcacao, index) => (
-      <input
-        key={index}
-        type="text"
-        placeholder="Marcações"
-        value={marcacao}
-        onChange={(e) => handleInputChange(index, e.target.value)}
-      />
-    ))}
-  </div>
-  <img src={addIcon} alt="Add Icon" className="add-icon" />
-</div>
+        <div className="marcacoes">
+          {marcacoes.map((marcacao, index) => (
+            <input
+              key={index}
+              type="text"
+              placeholder={`Marcação ${index + 1}`}
+              value={marcacao}
+              onChange={(e) => handleInputChange(index, e.target.value)}
+            />
+          ))}
+        </div>
+        <div className="botoes">
+          <img src={addIcon} alt="Add Icon" className="add-icon" onClick={adicionarMarcacao} />
+          {marcacoes.length > 4 && (
+            <img
+              src={subtracaoIcon}
+              alt="Subtraction Icon"
+              className="subtracao-icon"
+              onClick={removerUltimaMarcacao}
+            />
+          )}
+        </div>
+      </div>
 
       <input
         type="button"
