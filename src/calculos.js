@@ -10,7 +10,7 @@ const FIM_NOTURNO = '05:00'; // Fim do período noturno
 // Função principal para calcular resultados com base na carga horária e marcações
 export const calcular = (cargaHoraria, marcacoes) => {
   const cargaHorariaMin = converterParaMinutos(cargaHoraria); // Converte carga horária para minutos
-  const marcacoesAjustadas = ajustarDiaMarcacoes(marcacoes); // Ajusta as marcações para lidar com troca de dia
+  const { marcacoesAjustadas, diasMarcacoes } = ajustarDiaMarcacoes(marcacoes); // Ajusta as marcações para lidar com troca de dia
 
   let horasTrabalhadasMin = 0;
   let intervaloMin = 0;
@@ -78,6 +78,7 @@ export const calcular = (cargaHoraria, marcacoes) => {
 const ajustarDiaMarcacoes = (marcacoes) => {
   let referenciaDia = new Date(); // Define a data de referência inicial
   let ajustadas = []; // Array para armazenar as marcações ajustadas
+  let diasMarcacoes = []; // Array para armazenar os dias das marcações
 
   for (let i = 0; i < marcacoes.length; i++) {
     if (marcacoes[i] === '') continue; // Ignora marcações vazias
@@ -90,9 +91,10 @@ const ajustarDiaMarcacoes = (marcacoes) => {
       minutosAtual = converterParaMinutos(marcacoes[i], referenciaDia);
     }
     ajustadas.push(minutosAtual); // Adiciona a marcação ajustada ao array
+    diasMarcacoes.push(referenciaDia.getDate()); // Adiciona o dia correspondente ao array
   }
 
-  return ajustadas; // Retorna o array com as marcações ajustadas
+  return { marcacoesAjustadas: ajustadas, diasMarcacoes }; // Retorna as marcações ajustadas e os dias
 };
 
 // Função para calcular o adicional noturno com base no início e fim das marcações
@@ -100,16 +102,24 @@ const calcularAdicionalNoturno = (inicioMinutos, fimMinutos) => {
   const horaInicioNoturno = converterParaMinutos(INICIO_NOTURNO);
   const horaFimNoturno = converterParaMinutos(FIM_NOTURNO) + 24 * 60; // Ajusta para 05:00 do próximo dia
 
-  // Se o período está totalmente fora do intervalo noturno, retorna 0
-  if (fimMinutos <= horaInicioNoturno || inicioMinutos >= horaFimNoturno) {
+  // Ajusta o início e o fim para o horário noturno, considerando a troca de dia
+  let inicioNoturno = Math.max(inicioMinutos, horaInicioNoturno);
+  let fimNoturno = Math.min(fimMinutos, horaFimNoturno);
+
+  // Caso o período esteja completamente fora do horário noturno, retorna 0
+  if (fimNoturno <= horaInicioNoturno || inicioNoturno >= horaFimNoturno) {
     return 0;
   }
 
   // Ajusta o início e o fim para o período noturno se necessário
-  const inicioNoturno = Math.max(inicioMinutos, horaInicioNoturno);
-  const fimNoturno = Math.min(fimMinutos, horaFimNoturno);
+  if (inicioMinutos < horaInicioNoturno && fimMinutos > horaInicioNoturno) {
+    inicioNoturno = horaInicioNoturno;
+  }
+  if (fimMinutos > horaFimNoturno && inicioMinutos < horaFimNoturno) {
+    fimNoturno = horaFimNoturno;
+  }
 
-  // Se o início ajustado for menor que o fim ajustado, calcula o adicional
+  // Calcula o período noturno efetivo
   if (inicioNoturno < fimNoturno) {
     const minutosAdicional = fimNoturno - inicioNoturno;
     return Math.round(minutosAdicional * ADICIONAL_NOTURNO_FATOR); // Ajusta para 52:30 minutos por hora e arredonda

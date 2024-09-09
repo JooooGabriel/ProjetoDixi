@@ -36,6 +36,25 @@ function App() {
     setMarcacoes(newMarcacoes);
   };
 
+  const isDiasDiferente = (marcacoes) => {
+    let diaAtual = 1;
+    let diasMarcacoes = [1]; // Começa no Dia 01
+  
+    for (let i = 1; i < marcacoes.length; i++) {
+      const marcacaoAnterior = parse(marcacoes[i - 1], 'HH:mm', new Date());
+      const marcacaoAtual = parse(marcacoes[i], 'HH:mm', new Date());
+  
+      if (marcacaoAtual < marcacaoAnterior) {
+        // Se a marcação atual for menor que a anterior, considera que passou da meia-noite
+        diaAtual += 1;
+      }
+      diasMarcacoes.push(diaAtual);
+    }
+  
+    return diasMarcacoes;
+  };
+  
+
   // Função para adicionar novas marcações
   const adicionarMarcacao = () => {
     setMarcacoes([...marcacoes, '', '']);
@@ -48,9 +67,9 @@ function App() {
     }
   };
 
-  // Função para calcular os resultados baseados nas marcações e carga horária
   const calcularResultados = () => {
-    const resultadosCalculados = calcular(cargaHoraria, marcacoes);
+    const diasMarcacoes = isDiasDiferente(marcacoes); // Calcula os dias internamente
+    const resultadosCalculados = calcular(cargaHoraria, marcacoes, diasMarcacoes); // Passa os dias para o cálculo
     setResultados(resultadosCalculados); // Atualiza o estado com os resultados
   };
 
