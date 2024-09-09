@@ -1,121 +1,117 @@
+/* Estilo geral para todos os elementos */
 * {
-  padding: 10px;
-  margin: auto;
+  padding: 10px; /* Adiciona espaçamento interno de 10px a todos os elementos */
+  margin: auto; /* Centraliza os elementos horizontalmente */
 }
 
+/* Estilo para o corpo do documento */
 body {
-  font-family: 'Poppins';
-  font-size: 20px;
+  font-family: 'Poppins', sans-serif; /* Define a fonte 'Poppins' para todo o texto, com uma fonte padrão alternativa */
+  font-size: 20px; /* Define o tamanho da fonte para 20px */
 }
 
-
+/* Estilo para o título com a classe 'projet' */
 .projet {
-  text-align: left;
-  font-size: 2em;
-  color: #000000;
+  text-align: left; /* Alinha o texto à esquerda */
+  font-size: 2em; /* Define o tamanho da fonte para 2em (2 vezes o tamanho da fonte padrão) */
+  color: #33e0ff; /* Define a cor do texto como preto */
 }
 
-
+/* Estilo para caixas de texto do tipo 'text' */
 input[type=text] {
-  border-radius: 8px;
-  /* Aumenta a curvatura dos cantos */
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-  /* Sombra mais suave e sutil */
-  background: #f9f9f9;
-  /* Fundo mais suave */
-  border: 1px solid #ccc;
-  /* Borda cinza claro */
-  width: 100px;
-  /* Aumenta a largura */
-  padding: 10px;
-  /* Espaçamento interno para texto */
-  font-size: 16px;
-  /* Aumenta o tamanho da fonte */
-  transition: all 0.3s ease;
-  /* Transição suave para interações */
+  border-radius: 8px; /* Adiciona bordas arredondadas com raio de 8px */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Adiciona sombra sutil com deslocamento e desfoque */
+  background: #f9f9f9; /* Define um fundo cinza claro */
+  border: 1px solid #ccc; /* Define uma borda cinza clara */
+  width: 100px; /* Define a largura da caixa de texto para 100px */
+  padding: 10px; /* Adiciona espaçamento interno de 10px */
+  font-size: 16px; /* Define o tamanho da fonte para 16px */
+  transition: all 0.3s ease; /* Adiciona transição suave para todas as propriedades ao alterar o estado */
 }
 
-/* Estilo ao focar na caixa de texto */
+/* Estilo para a caixa de texto quando está focada */
 input[type=text]:focus {
-  background: #ffffff;
-  /* Fundo branco ao focar */
-  border-color: #33e0ff;
-  /* Borda azul ao focar */
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
-  /* Sombra azul ao focar */
-  outline: none;
-  /* Remove o contorno padrão */
+  background: #ffffff; /* Altera o fundo para branco ao focar */
+  border-color: #33e0ff; /* Altera a cor da borda para azul claro ao focar */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.6); /* Adiciona sombra azul ao focar */
+  outline: none; /* Remove o contorno padrão */
 }
 
-
+/* Estilo para botões com a classe 'botao' */
 .botao {
-  color: white;
-  outline: none;
-  height: 40px;
-  text-align: center;
-  width: 130px;
-  border-radius: 40px;
-  background: #33e0ff;
-  border: 2px solid rgb(90, 138, 141);
-  letter-spacing: 1px;
-  text-shadow: 0;
-  }
+  color: white; /* Define a cor do texto como branco */
+  outline: none; /* Remove o contorno padrão do botão */
+  height: 40px; /* Define a altura do botão para 40px */
+  text-align: center; /* Alinha o texto ao centro */
+  width: 130px; /* Define a largura do botão para 130px */
+  border-radius: 40px; /* Adiciona bordas arredondadas com raio de 40px */
+  background: #33e0ff; /* Define o fundo do botão como azul claro */
+  border: 2px solid rgb(90, 138, 141); /* Define uma borda cinza escuro */
+  letter-spacing: 1px; /* Adiciona espaçamento entre as letras */
+  text-shadow: 0; /* Remove a sombra do texto */
+}
+
+/* Estilo para a classe 'resultado' */
+.resultado-box {
+  background-color: #f9f9f9; /* Fundo suave e claro */
+  border-radius: 12px; /* Bordas mais suaves */
+  padding: 25px; /* Aumenta o espaçamento interno */
+  margin-top: 20px; /* Margem superior */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra mais elegante */
+  transition: all 0.3s ease; /* Transição suave */
+  border-left: 5px solid #33e0ff; /* Adiciona uma borda colorida à esquerda */
+}
+
+.resultado-box:hover {
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2); /* Sombra mais intensa ao passar o mouse */
+}
 
 .resultado {
-  color: #33e0ff;
-}
-
-.resultado-box {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 20px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  font-size: 20px; /* Tamanho de fonte maior */
+  color: #33e0ff; /* Azul do tema */
+  margin-bottom: 10px; /* Espaçamento inferior */
+  font-weight: bold; /* Texto em negrito */
 }
 
 .info {
-  font-size: 18px;
-  margin: 10px 0;
+  font-size: 18px; /* Tamanho intermediário para os detalhes */
+  color: #333; /* Texto em cinza escuro */
+  margin: 8px 0; /* Margem entre as informações */
 }
 
 .info span {
-  font-weight: bold;
-  font-size: 22px;
-  color: #000;
+  font-weight: bold; /* Negrito para valores */
+  font-size: 22px; /* Tamanho de destaque */
+  color: #000; /* Texto em preto */
 }
 
+
+/* Estilo para o container de marcações */
 .marcacoes-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* Garante que as marcações fiquem à esquerda e o ícone à direita */
-  width: 60%;
-  /* Define a largura máxima do container (ajuste conforme necessário) */
-  max-width: 600px;
-  /* Limite a largura máxima, opcional */
-  width: 100%;
-  /* A largura agora ocupa o espaço necessário, mas os itens ficam distribuídos */
-  margin-left: 0;
-  /* Remove qualquer centralização */
+  display: flex; /* Usa flexbox para o layout */
+  align-items: center; /* Alinha itens ao centro verticalmente */
+  justify-content: space-between; /* Distribui os itens com espaço igual entre eles */
+  width: 60%; /* Define a largura do container como 60% do elemento pai */
+  max-width: 600px; /* Limita a largura máxima para 600px */
+  margin-left: 0; /* Remove a margem esquerda */
 }
 
+/* Estilo para o container das marcações */
 .marcacoes {
-  display: flex;
-  gap: 10px;
-  /* Espaçamento entre as marcações */
-  flex-wrap: nowrap;
-  /* Impede que as marcações quebrem linha */
+  display: flex; /* Usa flexbox para o layout */
+  gap: 10px; /* Adiciona espaço de 10px entre os itens */
+  flex-wrap: nowrap; /* Impede que os itens quebrem linha */
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adapta o número de colunas conforme o espaço disponível */
 }
 
+/* Estilo para ícones dentro das marcações */
 .add-icon, .subtracao-icon {
-  width: 40px; /* Defina o tamanho apropriado */
-  height: 40px;
-  cursor: pointer;
+  width: 40px; /* Define a largura dos ícones para 40px */
+  height: 40px; /* Define a altura dos ícones para 40px */
+  cursor: pointer; /* Altera o cursor para um ponteiro ao passar sobre o ícone */
 }
 
-
+/* Estilo para os campos de marcação dentro das marcações */
 .marcacoes input {
-  margin-right: 10px; /* Espaçamento entre os campos de marcação */
+  margin-right: 10px; /* Adiciona espaço à direita dos campos de marcação */
 }
-
-
