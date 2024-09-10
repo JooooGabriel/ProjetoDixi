@@ -1,5 +1,5 @@
 import { converterParaMinutos } from './utils';
-import { addDays } from 'date-fns'; // Importa a função addDays da biblioteca date-fns para manipulação de datas
+import { addDays } from 'date-fns';
 
 // Constantes para tolerância de minutos e fator do adicional noturno
 const TOLERANCIA_MINUTOS = 10;
@@ -9,14 +9,13 @@ const FIM_NOTURNO = '05:00'; // Fim do período noturno
 
 // Função principal para calcular resultados com base na carga horária e marcações
 export const calcular = (cargaHoraria, marcacoes) => {
-  const cargaHorariaMin = converterParaMinutos(cargaHoraria); // Converte carga horária para minutos
-  const { marcacoesAjustadas, diasMarcacoes } = ajustarDiaMarcacoes(marcacoes); // Ajusta as marcações para lidar com troca de dia
+  const cargaHorariaMin = converterParaMinutos(cargaHoraria);
+  const { marcacoesAjustadas, diasMarcacoes } = ajustarDiaMarcacoes(marcacoes);
 
   let horasTrabalhadasMin = 0;
   let intervaloMin = 0;
   let adicionalNoturnoMin = 0;
 
-  // Itera sobre as marcações ajustadas para calcular horas trabalhadas, intervalo e adicional noturno
   for (let i = 0; i < marcacoesAjustadas.length; i += 2) {
     const inicioMinutos = marcacoesAjustadas[i];
     const fimMinutos = marcacoesAjustadas[i + 1];
@@ -24,33 +23,30 @@ export const calcular = (cargaHoraria, marcacoes) => {
     if (inicioMinutos !== undefined && fimMinutos !== undefined) {
       // Corrige o fim se ele for menor que o início, considerando a troca de dia
       const fimCorrigido = fimMinutos < inicioMinutos ? fimMinutos + 24 * 60 : fimMinutos;
-      horasTrabalhadasMin += fimCorrigido - inicioMinutos; // Calcula o total de horas trabalhadas
-      adicionalNoturnoMin += calcularAdicionalNoturno(inicioMinutos, fimCorrigido); // Calcula o adicional noturno
+      horasTrabalhadasMin += fimCorrigido - inicioMinutos;
+      adicionalNoturnoMin += calcularAdicionalNoturno(inicioMinutos, fimCorrigido, diasMarcacoes[i], diasMarcacoes[i + 1]);
     }
 
     // Calcula o intervalo entre marcações, se houver
     if (i + 2 < marcacoesAjustadas.length) {
       const proximoInicioMinutos = marcacoesAjustadas[i + 2];
       if (fimMinutos !== undefined && proximoInicioMinutos !== undefined) {
-        intervaloMin += Math.max(0, proximoInicioMinutos - fimMinutos); // Adiciona o intervalo, se positivo
+        intervaloMin += Math.max(0, proximoInicioMinutos - fimMinutos);
       }
     }
   }
 
-  // Verifica se há apenas duas marcações e ajusta o cálculo
   if (marcacoesAjustadas.length === 2) {
     const inicioMinutos = marcacoesAjustadas[0];
     const fimMinutos = marcacoesAjustadas[1];
     const fimCorrigido = fimMinutos < inicioMinutos ? fimMinutos + 24 * 60 : fimMinutos;
     horasTrabalhadasMin = fimCorrigido - inicioMinutos;
-    adicionalNoturnoMin = calcularAdicionalNoturno(inicioMinutos, fimCorrigido);
+    adicionalNoturnoMin = calcularAdicionalNoturno(inicioMinutos, fimCorrigido, diasMarcacoes[0], diasMarcacoes[1]);
   }
 
-  // Garante que horas negativas não sejam permitidas
   horasTrabalhadasMin = Math.max(0, horasTrabalhadasMin);
   adicionalNoturnoMin = Math.max(0, adicionalNoturnoMin);
 
-  // Calcula o crédito e débito com base na carga horária e tolerância
   const trabalhadaNormalMin = Math.min(horasTrabalhadasMin, cargaHorariaMin);
   const diferencaMinutos = horasTrabalhadasMin - cargaHorariaMin;
 
@@ -58,12 +54,11 @@ export const calcular = (cargaHoraria, marcacoes) => {
   let creditoMin = 0;
 
   if (diferencaMinutos > TOLERANCIA_MINUTOS) {
-    creditoMin = diferencaMinutos; // Adiciona ao crédito se a diferença for maior que a tolerância
+    creditoMin = diferencaMinutos;
   } else if (diferencaMinutos < -TOLERANCIA_MINUTOS) {
-    debitoMin = Math.abs(diferencaMinutos); // Adiciona ao débito se a diferença for menor que a tolerância
+    debitoMin = Math.abs(diferencaMinutos);
   }
 
-  // Retorna os resultados formatados
   return {
     horasTrabalhadas: formatarResultado(horasTrabalhadasMin),
     debito: formatarResultado(debitoMin),
@@ -77,41 +72,42 @@ export const calcular = (cargaHoraria, marcacoes) => {
 // Função para ajustar as marcações de hora para considerar a troca de dia
 const ajustarDiaMarcacoes = (marcacoes) => {
   let referenciaDia = new Date(); // Define a data de referência inicial
-  let ajustadas = []; // Array para armazenar as marcações ajustadas
-  let diasMarcacoes = []; // Array para armazenar os dias das marcações
+  let ajustadas = [];
+  let diasMarcacoes = [];
 
   for (let i = 0; i < marcacoes.length; i++) {
-    if (marcacoes[i] === '') continue; // Ignora marcações vazias
+    if (marcacoes[i] === '') continue;
 
     let minutosAtual = converterParaMinutos(marcacoes[i], referenciaDia);
 
-    // Se a marcação atual é menor que a anterior, avança o dia
     if (i > 0 && minutosAtual < converterParaMinutos(marcacoes[i - 1], referenciaDia)) {
       referenciaDia = addDays(referenciaDia, 1);
       minutosAtual = converterParaMinutos(marcacoes[i], referenciaDia);
     }
-    ajustadas.push(minutosAtual); // Adiciona a marcação ajustada ao array
+    ajustadas.push(minutosAtual);
     diasMarcacoes.push(referenciaDia.getDate()); // Adiciona o dia correspondente ao array
   }
 
-  return { marcacoesAjustadas: ajustadas, diasMarcacoes }; // Retorna as marcações ajustadas e os dias
+  return { marcacoesAjustadas: ajustadas, diasMarcacoes };
 };
 
+// Função para verificar se o dia mudou
+const isDiaDiferente = (diaAtual, diaAnterior) => diaAtual !== diaAnterior;
+
 // Função para calcular o adicional noturno com base no início e fim das marcações
-const calcularAdicionalNoturno = (inicioMinutos, fimMinutos) => {
+const calcularAdicionalNoturno = (inicioMinutos, fimMinutos, diaInicio, diaFim) => {
   const horaInicioNoturno = converterParaMinutos(INICIO_NOTURNO);
-  const horaFimNoturno = converterParaMinutos(FIM_NOTURNO) + 24 * 60; // Ajusta para 05:00 do próximo dia
+  const horaFimNoturno = converterParaMinutos(FIM_NOTURNO) + 24 * 60;
 
   // Ajusta o início e o fim para o horário noturno, considerando a troca de dia
   let inicioNoturno = Math.max(inicioMinutos, horaInicioNoturno);
   let fimNoturno = Math.min(fimMinutos, horaFimNoturno);
 
-  // Caso o período esteja completamente fora do horário noturno, retorna 0
-  if (fimNoturno <= horaInicioNoturno || inicioNoturno >= horaFimNoturno) {
-    return 0;
+  // Verifica se a marcação atravessa a meia-noite e ajusta os limites
+  if (isDiaDiferente(diaInicio, diaFim)) {
+    fimNoturno += 24 * 60;
   }
 
-  // Ajusta o início e o fim para o período noturno se necessário
   if (inicioMinutos < horaInicioNoturno && fimMinutos > horaInicioNoturno) {
     inicioNoturno = horaInicioNoturno;
   }
@@ -122,15 +118,15 @@ const calcularAdicionalNoturno = (inicioMinutos, fimMinutos) => {
   // Calcula o período noturno efetivo
   if (inicioNoturno < fimNoturno) {
     const minutosAdicional = fimNoturno - inicioNoturno;
-    return Math.round(minutosAdicional * ADICIONAL_NOTURNO_FATOR); // Ajusta para 52:30 minutos por hora e arredonda
+    return Math.round(minutosAdicional * ADICIONAL_NOTURNO_FATOR);
   }
 
-  return 0; // Retorna 0 se não houver adicional noturno
+  return 0;
 };
 
 // Função para formatar o resultado em horas e minutos
 const formatarResultado = (minutos) => {
-  const horas = Math.floor(minutos / 60).toString().padStart(2, '0'); // Calcula horas e formata com dois dígitos
-  const mins = (minutos % 60).toString().padStart(2, '0'); // Calcula minutos e formata com dois dígitos
-  return `${horas}:${mins}`; // Retorna a string formatada no formato HH:mm
+  const horas = Math.floor(minutos / 60).toString().padStart(2, '0');
+  const mins = (minutos % 60).toString().padStart(2, '0');
+  return `${horas}:${mins}`;
 };
