@@ -1,117 +1,117 @@
-/* Estilo geral para todos os elementos */
-* {
-  padding: 10px; /* Adiciona espaçamento interno de 10px a todos os elementos */
-  margin: auto; /* Centraliza os elementos horizontalmente */
+ *{
+  padding: 10px; 
+  margin: auto; 
 }
 
-/* Estilo para o corpo do documento */
+
 body {
-  font-family: 'Poppins', sans-serif; /* Define a fonte 'Poppins' para todo o texto, com uma fonte padrão alternativa */
-  font-size: 20px; /* Define o tamanho da fonte para 20px */
+  font-family: 'Poppins', sans-serif; 
+  font-size: 20px; 
 }
 
-/* Estilo para o título com a classe 'projet' */
+
 .projet {
-  text-align: left; /* Alinha o texto à esquerda */
-  font-size: 2em; /* Define o tamanho da fonte para 2em (2 vezes o tamanho da fonte padrão) */
-  color: #33e0ff; /* Define a cor do texto como preto */
+  text-align: left; 
+  font-size: 2em; 
+  color: #33e0ff; 
+
 }
 
-/* Estilo para caixas de texto do tipo 'text' */
+
 input[type=text] {
-  border-radius: 8px; /* Adiciona bordas arredondadas com raio de 8px */
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Adiciona sombra sutil com deslocamento e desfoque */
-  background: #f9f9f9; /* Define um fundo cinza claro */
-  border: 1px solid #ccc; /* Define uma borda cinza clara */
-  width: 100px; /* Define a largura da caixa de texto para 100px */
-  padding: 10px; /* Adiciona espaçamento interno de 10px */
-  font-size: 16px; /* Define o tamanho da fonte para 16px */
-  transition: all 0.3s ease; /* Adiciona transição suave para todas as propriedades ao alterar o estado */
+  border-radius: 8px; 
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+  background: #f9f9f9; 
+  border: 1px solid #ccc; 
+  width: 100px; 
+  padding: 10px; 
+  font-size: 16px; 
+  transition: all 0.3s ease; 
 }
 
-/* Estilo para a caixa de texto quando está focada */
+
 input[type=text]:focus {
-  background: #ffffff; /* Altera o fundo para branco ao focar */
-  border-color: #33e0ff; /* Altera a cor da borda para azul claro ao focar */
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.6); /* Adiciona sombra azul ao focar */
-  outline: none; /* Remove o contorno padrão */
+  background: #ffffff;
+  border-color: #33e0ff; 
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.6);
+  outline: none; 
 }
 
-/* Estilo para botões com a classe 'botao' */
+
 .botao {
-  color: white; /* Define a cor do texto como branco */
-  outline: none; /* Remove o contorno padrão do botão */
-  height: 40px; /* Define a altura do botão para 40px */
-  text-align: center; /* Alinha o texto ao centro */
-  width: 130px; /* Define a largura do botão para 130px */
-  border-radius: 40px; /* Adiciona bordas arredondadas com raio de 40px */
-  background: #33e0ff; /* Define o fundo do botão como azul claro */
-  border: 2px solid rgb(90, 138, 141); /* Define uma borda cinza escuro */
-  letter-spacing: 1px; /* Adiciona espaçamento entre as letras */
-  text-shadow: 0; /* Remove a sombra do texto */
+  color: rgb(255, 255, 255); 
+  outline: none; 
+  height: 40px; 
+  text-align: center; 
+  width: 130px; 
+  border-radius: 40px; 
+  border: 2px solid rgb(12, 36, 37); 
+  letter-spacing: 1px; 
+  text-shadow: 0; 
+  background-color: #33e0ff;
 }
 
-/* Estilo para a classe 'resultado' */
+
 .resultado-box {
-  background-color: #f9f9f9; /* Fundo suave e claro */
-  border-radius: 12px; /* Bordas mais suaves */
-  padding: 25px; /* Aumenta o espaçamento interno */
-  margin-top: 20px; /* Margem superior */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra mais elegante */
-  transition: all 0.3s ease; /* Transição suave */
-  border-left: 5px solid #33e0ff; /* Adiciona uma borda colorida à esquerda */
+  background-color: #f9f9f9; 
+  border-radius: 12px; 
+  padding: 25px; 
+  margin-top: 20px; 
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+  transition: all 0.3s ease; 
+  border-left: 5px solid #33e0ff; 
 }
 
 .resultado-box:hover {
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2); /* Sombra mais intensa ao passar o mouse */
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2); 
 }
 
 .resultado {
-  font-size: 20px; /* Tamanho de fonte maior */
-  color: #33e0ff; /* Azul do tema */
-  margin-bottom: 10px; /* Espaçamento inferior */
-  font-weight: bold; /* Texto em negrito */
+  font-size: 20px; 
+  color: #33e0ff; 
+  margin-bottom: 10px; 
+  font-weight: bold; 
 }
 
 .info {
-  font-size: 18px; /* Tamanho intermediário para os detalhes */
-  color: #333; /* Texto em cinza escuro */
-  margin: 8px 0; /* Margem entre as informações */
+  font-size: 18px; 
+  color: #333; 
+  margin: 8px 0; 
 }
 
 .info span {
-  font-weight: bold; /* Negrito para valores */
-  font-size: 22px; /* Tamanho de destaque */
-  color: #000; /* Texto em preto */
+  font-weight: bold; 
+  font-size: 22px; 
+  color: #000; 
 }
 
 
-/* Estilo para o container de marcações */
+
 .marcacoes-container {
-  display: flex; /* Usa flexbox para o layout */
-  align-items: center; /* Alinha itens ao centro verticalmente */
-  justify-content: space-between; /* Distribui os itens com espaço igual entre eles */
-  width: 60%; /* Define a largura do container como 60% do elemento pai */
-  max-width: 600px; /* Limita a largura máxima para 600px */
-  margin-left: 0; /* Remove a margem esquerda */
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  width: 60%; 
+  max-width: 600px; 
+  margin-left: 0; 
 }
 
-/* Estilo para o container das marcações */
+
 .marcacoes {
-  display: flex; /* Usa flexbox para o layout */
-  gap: 10px; /* Adiciona espaço de 10px entre os itens */
-  flex-wrap: nowrap; /* Impede que os itens quebrem linha */
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adapta o número de colunas conforme o espaço disponível */
+  display: flex; 
+  gap: 10px; 
+  flex-wrap: nowrap; 
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
 }
 
-/* Estilo para ícones dentro das marcações */
+
 .add-icon, .subtracao-icon {
-  width: 40px; /* Define a largura dos ícones para 40px */
-  height: 40px; /* Define a altura dos ícones para 40px */
-  cursor: pointer; /* Altera o cursor para um ponteiro ao passar sobre o ícone */
+  width: 40px; 
+  height: 40px; 
+  cursor: pointer;
 }
 
-/* Estilo para os campos de marcação dentro das marcações */
+
 .marcacoes input {
-  margin-right: 10px; /* Adiciona espaço à direita dos campos de marcação */
+  margin-right: 10px;
 }

@@ -9,10 +9,8 @@ import { formatarHora, ajustarDiaMarcacoes, converterParaMinutos } from './utils
 
 
 function App() {
-  // Estado para armazenar a carga horária e as marcações
   const [cargaHoraria, setCargaHoraria] = useState('');
   const [marcacoes, setMarcacoes] = useState(['', '', '', '']);
-  // Estado para armazenar os resultados dos cálculos
   const [resultados, setResultados] = useState({
     horasTrabalhadas: '',
     debito: '',
